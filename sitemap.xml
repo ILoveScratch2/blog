@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/categories</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/tags</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/archives</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/about</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/feed.xml</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/posts/FirstBlog</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://blog.ilovescratch.us.kg/tags/test</loc>
+ <priority>0.3</priority>
+ <lastmod>2024-10-19</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+</urlset>
