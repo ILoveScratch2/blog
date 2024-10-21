@@ -152,3 +152,8 @@ EOF
 str="Hello, World!"
 echo $str
 ```
+
+## 6. 插件测试
+
+Emoji: :+1:
+Mention: @ILoveScratch2
