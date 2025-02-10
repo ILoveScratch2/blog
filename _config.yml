@@ -18,11 +18,11 @@ title: ILoveScratch Blog
 
 tagline: Debug the world!
 
-description: ILoveScratch的博客。记录各种实用
+description: ILoveScratch的博客。记录各种实用软件，IT知识
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
-url: ""
+url: "https://blog.ilovescratch.us.kg"
 
 github:
   username: ILoveScratch2 # change to your GitHub username
