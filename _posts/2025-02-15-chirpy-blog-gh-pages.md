@@ -1,0 +1,678 @@
+---
+title: "使用Chirpy主题搭建GitHub Pages的博客"
+date: 2025-02-15 12:00:00 +0800
+categories: [TOP_CATEGORIE, SUB_CATEGORIE]
+tags: [TAG]
+math: true
+---
+
+# 论使用Chirpy主题搭建GitHub Pages的博客
+
+## 前言
+
+
+
+GitHub Pages是一个免费的静态网站托管服务，可以搭建项目主页、个人作品展示之类的静态网站。我来介绍如何使用Chirpy主题搭建GitHub Pages的博客。
+
+网上的教程质量参差不齐，有的教程写得很详细，有的教程写得很简单，有的教程写得很乱，有的教程写得很烂。我实在是受不了了，所以我决定写一篇详细的教程，从零开始使用Chirpy主题搭建GitHub Pages的博客。（不然别人写过的东西我再写一遍干啥）
+
+## 准备工作
+
+首先，需要一个GitHub账号，没有的话可以注册一个。
+
+注册链接：[注册GitHub](https://github.com/join)
+
+有一个GitHub账号非常方便，而且GitHub Pages是免费提供的。必须夸夸GitHub 赛博良人（虽然不及Cloudflare）
+
+访问不了GitHub的，我后面会出文章解决。
+
+## 开始搭建
+
+### 1. 创建Chirpy主题仓库
+
+推荐使用Chirpy-Starter方式。原因也很明显：好升级，简单，好用。
+
+官网原文：
+```
+有两种方法可以为此主题创建新的存储库：
+
+- [**使用 Chirpy Starter**](https://pansong291.github.io/chirpy-demo-zhCN/posts/getting-started/#方式一-使用-chirpy-starter) - 易于升级，隔离不相关的项目文件，以便您可以专注于写作。
+- [**Forking on GitHub**](https://pansong291.github.io/chirpy-demo-zhCN/posts/getting-started/#方式二-forking-on-github) - 方便自定义开发，但难以升级。除非您熟悉 Jekyll 并决定对该项目做出调整或贡献，否则不建议使用此方法。
+```
+
+
+使用Chirpy-Starter作为模板，打开[Chirpy-Starter](https://github.com/cotes2020/chirpy-starter/generate)这个链接，会跳转到GitHub的新建仓库页面，创建一个新的仓库。
+
+名字自己写，如果想使用GitHub Pages自己的域名，可以把仓库名改成`用户名.github.io`，这样GitHub Pages会自动为你生成域名。不设置也行，比如我已经为我的[ILoveScratch2.github.io](https://ilovescratch2.us.kg)域名绑定了GitHub Pages并设置了自定义域名当成主页，如果已经有仓库了就会变成`用户名.github.io/仓库名`或者`域名/仓库名`。
+
+我这里仓库名是`blog`，所以我的GitHub Pages的默认地址应该是`https://ilovescratch2.github.io/blog`(如果未设置自定义域名)。或者如果已经为`username.github.io`绑定了域名，那么应该是`https://域名/blog`。
+
+其实这些后面都可以自定义。具体待会再说，也不多废话了。
+
+Name自己写（设成主页并且用自带域名就是`你的用户名.github.io`。不用它当主页就自己考虑，没自定义域名并且用过`用户名.github.io`的可以也写成`blog`，这样就是`用户名.github.io/blog`了,有自定义域名如果想要是`域名/仓库名`的就自己考虑，自定义域名新建DNS记录的，比如`CNAME blog github.io。`就随便写，到时候设置域名的时候改就行了）
+
+Owner选择自己的GitHub账号。
+
+Description随便写，也可以不写，比如“我的博客”。
+
+Repository Type最好选`Public`，`Private`没买GitHub Pro的是不能建设Pages的。而且`Public`也方便类似`giscus`这样的评论插件的使用。(其实也可以把评论存到别的仓库，但是我觉得这样不如一起方便)
+
+
+点击`Create repository`按钮创建仓库，就创建好了仓库。如果卡在`Generating your repository`，刷新一下页面，应该就出来了。
+
+### 2. 绑定域名（可选）
+
+如果想绑定自己的域名，可以到GitHub Pages的设置里绑定。
+
+如果你有占用了`用户名.github.io`的仓库，并且绑定了域名，默认就会作为你的域名，此时你自带的域名就会是`你曾经为用户名.github.io设置的域名/仓库名`。
+
+首先，到域名服务商那里购买域名，比如腾讯云、阿里云、GoDaddy等，想必不用我教了，网上一堆教程。
+
+然后，在域名服务商那里设置DNS记录，将域名指向GitHub Pages的IP地址。
+
+比如，我的域名是`ilovescratch2.us.kg`，在腾讯云的DNS管理里，添加一条记录，记录类型选择`CNAME`，主机记录填`blog`，记录值填`github.io`保存。
+
+如果你想把根域`@`指向你的博客，你就不能写`CNAME`记录了，而是添加一条`A`记录，记录值填`192.168.127.12`（GitHub Pages的IP地址），保存。
+
+保存好了，过一段时间，你的域名应该就生效了。
+
+但是仅仅这样是不够的，还需要在GitHub Pages的设置里设置自定义域名。
+
+点击仓库的Settings，然后点击Pages，先在`Build and deployment` 下面的`Source`选择`GitHub Actions`，然后在`Custom domain`里填上你的域名，保存。
+
+保存好了，过一段时间，你的自定义域名应该就生效了。
+
+### 3. 配置Chirpy主题
+
+仅仅把域名绑定到仓库是不行的，还需要配置使用，然后部署，才能看到博客。
+
+一般情况下，创建完仓库后就会有一个`GitHub Actions`的工作流部署，但是大部分情况下这个第一次部署会失败，因为还没有配置好。
+
+现在已经配置完域名了，我们需要配置Chirpy主题。
+
+打开`Code`选项，打开`_config.yml`文件，点击编辑按钮，修改配置。
+
+
+`lang: en`
+
+`lang`默认是`en`，改成你想显示的语言，比如`zh-CN`是简体中文。(`lang: zh-CN`)
+
+
+
+`timezone:`
+
+`timezone`是时区，默认是`UTC`，我改成中国时区，比如`Asia/Shanghai`。
+(`timezone: Asia/Shanghai`)
+
+
+`title: Chirpy # the main title`
+
+`title`是博客的标题，可以改成你想显示的标题。(`title: ILoveScratch Blog`，你也可以改成你想要的)
+
+
+`tagline: A text-focused Jekyll theme # it will display as the subtitle`
+
+`tagline`是博客的副标题，可以改成你想显示的副标题。(比如`tagline: 记录生活的点滴`)
+
+
+`description: >- # used by seo meta and the atom feed
+  A minimal, responsive and feature-rich Jekyll theme for technical writing.`
+
+`description`是博客的描述，在搜索引擎或者FEED里可能会用到，可以改成你想显示的描述。(比如`description: 记录生活的点滴，分享技术、生活、感悟的博客`)
+
+
+`url: ""`
+
+`url`是博客的网址，默认是空的，如果绑定了自定义域名，就改成`https://域名`。(比如`url: "https://ilovescratch2.us.kg"`，没有绑定自定义域名就改成`https://你的用户名.github.io`(注意不要在末尾加斜杠，而且必须是HTTPS，不然会被“没事找茬”的检查器报告不安全)
+
+```yml
+github:
+  username: github_username # change to your GitHub username
+```
+`github`下的`username`是你的GitHub用户名，可以改成你自己的。
+
+其他Twitter之类的也一样，但是这个一般不用设置（毕竟用Twitter的不多，配置方式和GitHub一样）
+
+```yml
+social:
+  # Change to your full name.
+  # It will be displayed as the default author of the posts and the copyright owner in the Footer
+  name: your_full_name
+  email: example@domain.com # change to your email address
+  links:
+    # The first element serves as the copyright owner's link
+    - https://twitter.com/username # change to your Twitter homepage
+    - https://github.com/username # change to your GitHub homepage
+    # Uncomment below to add more social links
+    # - https://www.facebook.com/username
+    # - https://www.linkedin.com/in/username
+```
+
+这些配置拿翻译软件看看就知道什么意思
+`name`是你的名字，可以改成你自己的。
+`email`是你的邮箱，可以改成你自己的。
+`links:`底下是你的链接，可以改成你自己的主页（如果有）或者社交媒体之类的。
+
+预设了推特GitHub脸书领英的URL，自己取消注释（去掉`#`然后改成你的就行了）
+
+比如这是我的配置（每个人都是不同的）
+```yml
+social:
+  # Change to your full name.
+  # It will be displayed as the default author of the posts and the copyright owner in the Footer
+  name: ILoveScratch
+  email: ilovescratch@ilovescratch.us.kg # change to your email address
+  links:
+    # The first element serves as the copyright owner's link
+    # - https://twitter.com/username # change to your Twitter homepage
+    - https://github.com/ILoveScratch2 # change to your GitHub homepage
+    # Uncomment below to add more social links
+    # - https://www.facebook.com/username
+    # - https://www.linkedin.com/in/username
+```
+
+然后是`webmaster`设置，用来给搜索引擎验证网站用的，暂时用不着
+
+`analytics`设置，用来统计网站的访问量，比如`Google Analytics`之类的统计，暂时用不着
+
+底下大部分都不用改，可以保留默认配置。
+
+`theme_mode: # [light | dark]`
+
+设置默认颜色模式是亮色还是暗色，默认跟随系统，大部分情况下不用改
+
+`avatar:`
+
+头像，可以替换成你自己的头像，写上图片URL就行了
+
+
+
+有的后面会改，现在先改到这里
+我现在的配置：（仅供参考）
+```yaml
+# The Site Configuration
+
+# Import the theme
+theme: jekyll-theme-chirpy
+
+# The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
+# If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
+# otherwise, the layout language will use the default value of 'en'.
+lang: zh-CN
+
+# Change to your timezone › https://kevinnovak.github.io/Time-Zone-Picker
+timezone: Asia/Shanghai
+
+# jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
+# ↓ --------------------------
+
+title: ILoveScratch Blog
+
+tagline: Debug the world!
+
+description: ILoveScratch的博客。记录各种实用软件，IT知识
+
+# Fill in the protocol & hostname for your site.
+# E.g. 'https://username.github.io', note that it does not end with a '/'.
+url: "https://blog.ilovescratch.us.kg"
+
+github:
+  username: ILoveScratch2 # change to your GitHub username
+
+twitter:
+  username: twitter_username # change to your Twitter username
+
+social:
+  # Change to your full name.
+  # It will be displayed as the default author of the posts and the copyright owner in the Footer
+  name: ILoveScratch
+  email: ilovescratch@ilovescratch.us.kg # change to your email address
+  links:
+    # The first element serves as the copyright owner's link
+    # - https://twitter.com/username # change to your Twitter homepage
+    - https://github.com/ILoveScratch2 # change to your GitHub homepage
+    # Uncomment below to add more social links
+    # - https://www.facebook.com/username
+    # - https://www.linkedin.com/in/username
+
+# Site Verification Settings
+webmaster_verifications:
+  google: # fill in your Google verification code
+  bing: # fill in your Bing verification code
+  alexa: # fill in your Alexa verification code
+  yandex: # fill in your Yandex verification code
+  baidu: # fill in your Baidu verification code
+  facebook: # fill in your Facebook verification code
+
+# ↑ --------------------------
+# The end of `jekyll-seo-tag` settings
+
+# Web Analytics Settings
+analytics:
+  google:
+    id: # fill in your Google Analytics ID
+  goatcounter:
+    id: # fill in your GoatCounter ID
+  umami:
+    id: # fill in your Umami ID
+    domain: # fill in your Umami domain
+  matomo:
+    id: # fill in your Matomo ID
+    domain: # fill in your Matomo domain
+  cloudflare:
+    id: # fill in your Cloudflare Web Analytics token
+  fathom:
+    id: # fill in your Fathom Site ID
+
+# Page views settings
+pageviews:
+  provider: # now only supports 'goatcounter'
+
+# Prefer color scheme setting.
+#
+# Note: Keep empty will follow the system prefer color by default,
+# and there will be a toggle to switch the theme between dark and light
+# on the bottom left of the sidebar.
+#
+# Available options:
+#
+#     light — Use the light color scheme
+#     dark — Use the dark color scheme
+#
+theme_mode: # [light | dark]
+
+# The CDN endpoint for media resources.
+# Notice that once it is assigned, the CDN url
+# will be added to all media resources (site avatar, posts' images, audio and video files) paths starting with '/'
+#
+# e.g. 'https://cdn.com'
+cdn:
+
+# the avatar on sidebar, support local or CORS resources
+avatar: https://avatars.githubusercontent.com/u/161606492?v=4
+
+# The URL of the site-wide social preview image used in SEO `og:image` meta tag.
+# It can be overridden by a customized `page.image` in front matter.
+social_preview_image: # string, local or CORS resources
+
+# boolean type, the global switch for TOC in posts.
+toc: true
+
+comments:
+  # Global switch for the post-comment system. Keeping it empty means disabled.
+  provider: # [disqus | utterances | giscus]
+  # The provider options are as follows:
+  disqus:
+    shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
+  # utterances settings › https://utteranc.es/
+  utterances:
+    repo: # <gh-username>/<repo>
+    issue_term: # < url | pathname | title | ...>
+  # Giscus options › https://giscus.app
+  giscus:
+    repo: # <gh-username>/<repo>
+    repo_id:
+    category:
+    category_id:
+    mapping: # optional, default to 'pathname'
+    strict: # optional, default to '0'
+    input_position: # optional, default to 'bottom'
+    lang: # optional, default to the value of `site.lang`
+    reactions_enabled: # optional, default to the value of `1`
+
+# Self-hosted static assets, optional › https://github.com/cotes2020/chirpy-static-assets
+assets:
+  self_host:
+    enabled: # boolean, keep empty means false
+    # specify the Jekyll environment, empty means both
+    # only works if `assets.self_host.enabled` is 'true'
+    env: # [development | production]
+
+pwa:
+  enabled: true # The option for PWA feature (installable)
+  cache:
+    enabled: true # The option for PWA offline cache
+    # Paths defined here will be excluded from the PWA cache.
+    # Usually its value is the `baseurl` of another website that
+    # shares the same domain name as the current website.
+    deny_paths:
+      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+
+paginate: 10
+
+# The base URL of your site
+baseurl: ""
+
+# ------------ The following options are not recommended to be modified ------------------
+
+kramdown:
+  footnote_backlink: "&#8617;&#xfe0e;"
+  syntax_highlighter: rouge
+  syntax_highlighter_opts: # Rouge Options › https://github.com/jneen/rouge#full-options
+    css_class: highlight
+    # default_lang: console
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
+collections:
+  tabs:
+    output: true
+    sort_by: order
+
+defaults:
+  - scope:
+      path: "" # An empty string here means all files in the project
+      type: posts
+    values:
+      layout: post
+      comments: true # Enable comments in posts.
+      toc: true # Display TOC column in posts.
+      # DO NOT modify the following parameter unless you are confident enough
+      # to update the code of all other post links in this project.
+      permalink: /posts/:title/
+  - scope:
+      path: _drafts
+    values:
+      comments: false
+  - scope:
+      path: ""
+      type: tabs # see `site.collections`
+    values:
+      layout: page
+      permalink: /:title/
+
+sass:
+  style: compressed
+
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  profile: false
+  blanklines: false
+  ignore:
+    envs: [development]
+
+exclude:
+  - "*.gem"
+  - "*.gemspec"
+  - docs
+  - tools
+  - README.md
+  - LICENSE
+  - purgecss.js
+  - rollup.config.js
+  - "package*.json"
+
+jekyll-archives:
+  enabled: [categories, tags]
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    tag: /tags/:name/
+    category: /categories/:name/
+```
+
+
+设置完之后点右上角的`Commit changes`，再点一次`Commit changes`就可以了。
+
+然后还要配置个人介绍
+
+打开存放博客的仓库，打开`_tabs`文件夹，点击仓库的`Add file`，在下拉菜单里点击`Create a new file`按钮，在顶部的路径输入`about.md`
+
+然后使用Markdown格式写下你的个人介绍，如果你已经有主页了也可以写前往主页的链接
+
+比如我的个人介绍：
+
+```md
+
+[我的主页](https://ilovescratch.us.kg)
+
+Hello! 我是ILoveScratch，一名程序爱好者，热爱编程，喜欢分享，希望通过自己的努力帮助更多的人。
+
+你可以通过以下方式联系到我：
+
+- [GitHub](https://github.com/ILoveScratch2)
+- [Email](mailto:ilovescratch@ilovescratch.us.kg)
+- [Email](mailto:ilovescratch@foxmail.com)
+
+欢迎Fork、Star、Follow我！
+
+```
+
+
+
+### 4. 测试
+
+`Commit`之后，GitHub Actions就会自动部署，大概需要3分钟左右，部署完成后，就可以访问你的博客了。
+
+打开你设置的网址（比如`https://你的域名/blog`如果你已经为别的页面创建`用户名.github.io`并且绑定了域名，或者`https://你的域名`如果你单独绑定，或者`https://你的用户名.github.io/`如果你将仓库名设为`用户名.github.io`），如果看到下面这个页面，说明部署成功。
+
+
+### 5. 写第一篇Blog来测试
+
+现在，你已经成功部署了博客，可以开始写博客了。
+
+打开存放博客的仓库，打开`_posts`文件夹，点击仓库的`Add file`，在下拉菜单里点击`Create a new file`按钮，在顶部的路径输入`2025-01-01-Test.md`
+
+存放博客的Markdown必须是`年年年年-月月-日日-简短标题.md`
+
+这是头部的信息，每个文章都必须有，在这个头信息最后的`---`后面写正文
+
+```yaml
+---
+title: TITLE
+date: YYYY-MM-DD HH:MM:SS +/-TTTT 
+categories: [TOP_CATEGORIE, SUB_CATEGORIE]
+tags: [TAG]
+```
+
+以上是每个文章都必须有的头部信息
+以下是常见可选项
+
+
+```yaml
+---
+title: TITLE
+date: YYYY-MM-DD HH:MM:SS +/-TTTT 
+categories: [TOP_CATEGORIE, SUB_CATEGORIE]
+description: DESCRIPTION # 可以完全删除这一行
+comments: true  # 可以完全删除这一行
+mermaid: true  # 可以完全删除这一行
+
+tags: [TAG]
+---
+```
+简单介绍一下：
+
+`date`：博客的创建日期，其实可以自己写，什么时候都行，只是展示
+
+格式是`年年年年-月月-日日 时时:分分:秒秒 +/-UTC时区`，比如`2025-01-01 12:00:00 +0800`，就是2025年1月1日12:00:00，北京时间（UTC+8）这样的格式
+
+`title`：博客的标题，可以随便写，必须有
+
+`categories`：博客的分类，可以有多个，比如`Technology`、`Life`、`Travel`等等，可以自己定义，也可以按照自己的理解来分类，必须有
+
+`tags`：博客的标签，可以有多个，比如`Python`、`Java`、`C++`等等，可以自己定义，也可以按照自己的理解来分类，必须有
+
+`description`：博客的描述，可以自己写，可以是一句话，也可以是一段话。也可以删除这一行，不写会截取正文
+
+默认不渲染数学公式，比如LaTex，需要可以在头部加上`mathjax: true`来开启数学公式渲染。
+
+`comments`：是否开启评论功能，现在暂时没用，下文会配置评论功能。默认所有文章都开启评论功能。如果不写就默认开启。你可以写`false`来单独为这一篇文章关闭评论功能。
+
+现在，可以开始写正文了
+
+
+我准备了一段测试内容：
+
+包括头部的信息，所以这个文章你可以完全复制这一篇
+
+````md
+
+---
+title: 测试博客
+date: 2025-01-01 12:00:00 +0800
+categories: [测试]
+tags: [testing]
+description: 这是一篇测试博客，用于测试网站的各种功能
+math: true
+---
+
+
+# Markdown 渲染测试文档
+
+## 1. 标题测试
+# 1标题
+## 2标题
+### 3标题
+#### 4标题
+##### 5标题
+###### 6标题
+
+## 2. 文本格式测试
+**加粗文本**  
+*斜体文本*  
+~~删除线文本~~  
+***加粗斜体组合***  
+普通段落文本，测试换行和空格是否正常显示，比如  多个空格  和  
+软换行测试（行尾两个空格）
+
+## 3. 列表测试
+
+### 无序列表
+- 一级项目
+  - 二级嵌套
+    - 三级嵌套
+- 不同符号测试
+  * 星号项目
+  + 加号项目
+
+### 有序列表
+1. 第一项
+2. 第二项
+   1. 嵌套有序项
+   2. 嵌套有序项
+3. 第三项
+
+## 4. 链接与图片
+[普通链接](https://example.com)  
+![解释文字](https://cdn.pixabay.com/photo/2025/02/10/20/51/cardinal-9397549_1280.jpg)  
+
+
+带解释的图片：![蝴蝶](https://cdn.pixabay.com/photo/2025/02/07/02/40/butterfly-9388732_1280.jpg "悬浮标题")
+
+## 5. 引用块
+> 一级引用文本
+>> 二级嵌套引用
+>>> 三级嵌套引用
+
+
+
+## 6. 代码块测试
+
+### 单行代码
+`console.log("Hello World");`
+
+### 多行代码
+```python
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+```
+
+```javascript
+function add(a, b) {
+    return a + b;
+}
+```
+
+
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello Java");
+    }
+}
+```
+
+```go
+package main
+import "fmt"
+func main() {
+    fmt.Println("Hello Go")
+}
+```
+
+```bash
+#!/bin/bash
+echo "Hello Shell"
+```
+
+## 7. 表格测试
+
+| 表头1 | 表头2 | 表头3 |   
+|-------|-------|-------|
+| 单元格 | 单元格 | 单元格 |
+| 单元格 | 单元格 | 单元格 |
+
+
+| 左对齐 | 居中对齐 | 右对齐 |
+| :------ | :------: | ------: |
+| 单元格1 | 单元格2 | 单元格3 |
+| 长文本测试 | `代码内联` | **加粗文本** |
+
+
+
+
+## 8. HTML 嵌入测试
+
+远程HTML内容
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=28575553&auto=1&height=66"></iframe>
+
+<iframe src="//player.bilibili.com/player.html?bvid=BV1DXPQeAEVG" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+Markdown 内含 HTML 内容：
+
+<div style="background-color: #f2f2f2; padding: 10px;">
+  <p>这是一个 Markdown 内含 HTML 内容的测试。</p>
+  <p>HTML 代码：<code>&lt;div style="background-color: #f2f2f2; padding: 10px;"&gt; &lt;p&gt;这是一个 Markdown 内含 HTML 内容的测试。&lt;/p&gt; &lt;/div&gt;</code></p>
+</div>
+
+## 9. 分割线测试
+
+Hello
+---
+Hello
+
+## 10. 数学公式测试
+行内公式：$E = mc^2$
+
+块级公式：
+$$
+\sum_{i=1}^{n} i = \frac{n(n+1)}{2}
+$$
+
+# 11. Mermaid 流程图测试
+
+```mermaid
+graph LR
+A[开始] --> B[活动]
+B --> C[活动]
+C --> D[结束]
+```
+````
+
+点击`Commit changes`提交，然后等待几分钟打开网站
+
+欸？怎么没看到博客内容？
+
+因为Chirpy主题新版注册了 `Service Worker`，可以缓存网页内容（有时某些`VPN`网站被屏蔽或者你断网的时候访问会显示定制无法访问页面也是这个原理），缓存了内容。所以你可以清除网站缓存或者打开网站然后加载完成等一小会，会弹一个`A new  version of content is available`或`有新版本内容可用`的提示，然后点击弹窗的蓝色加载按钮就可以了。
+
