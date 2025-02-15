@@ -1,5 +1,5 @@
 ---
-title: "使用Chirpy主题搭建GitHub Pages的博客"
+title: "论使用Chirpy主题搭建GitHub Pages的博客"
 date: 2025-02-15 12:00:00 +0800
 categories: [TOP_CATEGORIE, SUB_CATEGORIE]
 tags: [TAG]
