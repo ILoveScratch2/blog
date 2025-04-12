@@ -20,4 +20,5 @@
 
 ## LICENSE
 框架(不包括`_posts`和`assets/img`内的内容)使用[MIT](LICENSE) LICENSE
+
 文章(仅`_posts`和`assets/img`内的内容) 优先按照文章说明，如未说明使用[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
