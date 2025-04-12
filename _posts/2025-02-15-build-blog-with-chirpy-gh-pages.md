@@ -12,7 +12,6 @@ description: 介绍使用Chirpy主题在GitHub Pages上快速搭建博客
 ## 前言
 
 
-
 GitHub Pages是一个免费的静态网站托管服务，可以搭建项目主页、个人作品展示之类的静态网站。我来介绍如何使用Chirpy主题搭建GitHub Pages的博客。
 
 网上的教程质量参差不齐，有的教程写得很详细，有的教程写得很简单，有的教程写得很乱，有的教程写得很烂。我实在是受不了了，所以我决定写一篇详细的教程，从零开始使用Chirpy主题搭建GitHub Pages的博客。（不然别人写过的东西我再写一遍干啥）
@@ -58,6 +57,7 @@ Description随便写，也可以不写，比如“我的博客”。
 
 Repository Type最好选`Public`，`Private`没买GitHub Pro的是不能建设Pages的。而且`Public`也方便类似`giscus`这样的评论插件的使用。(其实也可以把评论存到别的仓库，但是我觉得这样不如一起方便)
 
+![创建仓库](https://blog.ilovescratch.dpdns.org/assets/img/create_repo.png "创建仓库")
 
 点击`Create repository`按钮创建仓库，就创建好了仓库。如果卡在`Generating your repository`，刷新一下页面，应该就出来了。
 
@@ -74,6 +74,8 @@ Repository Type最好选`Public`，`Private`没买GitHub Pro的是不能建设Pa
 比如，我的域名是`ilovescratch2.us.kg`，在腾讯云的DNS管理里，添加一条记录，记录类型选择`CNAME`，主机记录填`blog`，记录值填`github.io`保存。
 
 如果你想把根域`@`指向你的博客，你就不能写`CNAME`记录了，而是添加一条`A`记录，记录值填`192.168.127.12`（GitHub Pages的IP地址），保存。
+
+![DNS](https://blog.ilovescratch.dpdns.org/assets/img/add_dns.png "创建仓库")
 
 保存好了，过一段时间，你的域名应该就生效了。
 
@@ -419,7 +421,9 @@ jekyll-archives:
 ```
 
 
-设置完之后点右上角的`Commit changes`，再点一次`Commit changes`就可以了。
+设置完之后点右上角的`Commit changes`，再点一次`Commit changes`保存就可以了。
+
+![设置config](ttps://blog.ilovescratch.dpdns.org/assets/img/update_config.png "创建仓库")
 
 然后还要配置个人介绍
 
