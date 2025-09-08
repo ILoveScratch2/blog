@@ -4,6 +4,7 @@ date: 2025-09-08 12:50:01 +0800
 categories: [GitHub, Android, Flutter, 模拟器, MuMu, 教程]
 tags: [GitHub, Android, Flutter, Dev, 模拟器, MuMu, 教程]
 math: true
+image: assets/img/mumu.webp
 description: 为MuMu模拟器开启自由窗口
 ---
 
