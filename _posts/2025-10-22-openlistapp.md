@@ -8,7 +8,6 @@ description: 请抵制OpenListApp
 ---
 
 
-
 众所周知，Alist被收购后，社区出现了OpenList分支
 
 进而，OpenList下，又出现了很多衍生项目

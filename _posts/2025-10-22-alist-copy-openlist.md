@@ -4,7 +4,6 @@ date: 2025-10-22 19:00:00 +0800
 categories: [GitHub, AList, OpenList, 开源, 软件]
 tags: [GitHub, AList, OpenList, Dev, 开源, 软件]
 math: true
-image: assets/img/mumu.png
 description: AList抄袭OpenList代码，践踏开源精神
 ---
 
