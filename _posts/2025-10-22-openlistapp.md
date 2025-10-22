@@ -1,7 +1,7 @@
 ---
 title: 请抵制OpenListApp
 date: 2025-10-22 17:53:22 +0800
-categories: [GitHub, Android, Flutter, OpenList, OpenListApp, 开源, 软件, 教程]
+categories: [OpenList, Third-Party]
 tags: [GitHub, Android, Flutter, OpenList, 开源, 软件, 教程]
 math: true
 description: 请抵制OpenListApp

@@ -1,7 +1,7 @@
 ---
 title: 绕过Windows 11/10的联网强制要求
 date: 2025-10-23 11:11:00 +0800
-categories: [GitHub, Windows, 教程, 软件]
+categories: [Windows]
 tags: [GitHub, Windows, 教程, Dev, 软件]
 math: true
 description: 绕过Windows 11/10的联网强制要求

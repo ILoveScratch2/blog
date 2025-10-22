@@ -1,7 +1,7 @@
 ---
 title: AList抄袭OpenList代码，践踏开源精神
 date: 2025-10-22 19:00:00 +0800
-categories: [GitHub, AList, OpenList, 开源, 软件]
+categories: [OpenList, Third-Party]
 tags: [GitHub, AList, OpenList, Dev, 开源, 软件]
 math: true
 description: AList抄袭OpenList代码，践踏开源精神
