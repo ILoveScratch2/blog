@@ -458,6 +458,10 @@ Hello! 我是ILoveScratch，一名程序爱好者，热爱编程，喜欢分享�
 
 现在，你已经成功部署了博客，可以开始写博客了。
 
+参见 [Writing a New Post](https://chirpy.cotes.page/posts/write-a-new-post/)。
+
+写作语法参见 [写作语法示例](https://pansong291.github.io/chirpy-demo-zhCN/posts/writing-syntax-example/)。
+
 打开存放博客的仓库，打开`_posts`文件夹，创建新的文件，在顶部的路径输入`2025-01-01-Test.md`
 
 存放博客的Markdown必须是`年年年年-月月-日日-简短标题.md`
