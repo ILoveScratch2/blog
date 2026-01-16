@@ -8,7 +8,7 @@
 ## 博客预览
 
 访问地址：  
-[https://blog.ilovescratch.dpdns.org](https://blog.ilovescratch.dpdns.org)
+[https://blog.ilovescratch.dpdns.org](https://blog.ilovescratch.us.ci)
 
 
 ## 使用
