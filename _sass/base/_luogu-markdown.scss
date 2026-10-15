@@ -1,0 +1,98 @@
+/* Luogu-flavoured Markdown blocks, rendered by _plugins/luogu-markdown.rb */
+
+.content {
+  /*
+   * 可折叠提示块：:::info / :::warning / :::success / :::error
+   * 颜色复用主题的 prompt 变量，自动适配明暗模式。
+   */
+  .md-block {
+    $palettes: (
+      info: info,
+      warning: warning,
+      success: tip,
+      error: danger,
+    );
+
+    margin: 1rem 0;
+    border-left: 0.25rem solid var(--blockquote-border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    @each $name, $palette in $palettes {
+      &.md-block-#{$name} {
+        background-color: var(--prompt-#{$palette}-bg);
+        border-left-color: var(--prompt-#{$palette}-icon-color);
+      }
+    }
+
+    > details > summary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.875rem;
+      font-weight: 600;
+      color: var(--prompt-text-color);
+      cursor: pointer;
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: '\f0da'; /* fa-caret-right */
+        font: var(--fa-font-solid);
+        color: var(--text-muted-color);
+        transition: transform 0.2s ease;
+        flex-shrink: 0;
+      }
+    }
+
+    > details[open] > summary::before {
+      transform: rotate(90deg);
+    }
+
+    .md-body {
+      padding: 0 1rem 0.5rem 2.1rem;
+
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  /* :::align[center|left|right] */
+  .md-align-center {
+    text-align: center;
+  }
+
+  .md-align-left {
+    text-align: left;
+  }
+
+  .md-align-right {
+    text-align: right;
+  }
+
+  /* :::epigraph{author="..."} —— 基础样式沿用主题的 blockquote */
+  .md-epigraph .md-epigraph-author {
+    display: block;
+    margin-top: 0.5rem;
+    text-align: right;
+    font-style: normal;
+
+    &::before {
+      content: '—— ';
+    }
+  }
+
+  /* ::cute-table{tuack} */
+  table.cute-table {
+    text-align: center;
+  }
+
+  /* 合并后的单元格 */
+  .md-table-merged-cell {
+    vertical-align: middle;
+  }
+}
