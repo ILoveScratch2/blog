@@ -26,8 +26,8 @@ toc:
 fontawesome:
   css: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css
 
-search:
-  js: https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js
+# search: no external library — the search script is bundled in the page
+# (see `_includes/search-loader.html`)
 
 mermaid:
   js: https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js

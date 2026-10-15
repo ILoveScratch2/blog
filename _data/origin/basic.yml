@@ -11,8 +11,8 @@ toc:
 fontawesome:
   css: /assets/lib/fontawesome-free/css/all.min.css
 
-search:
-  js: /assets/lib/simple-jekyll-search/simple-jekyll-search.min.js
+# search: no external library — the search script is bundled in the page
+# (see `_includes/search-loader.html`)
 
 mermaid:
   js: /assets/lib/mermaid/mermaid.min.js

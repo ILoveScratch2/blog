@@ -1,49 +1,123 @@
 <!--
-  Jekyll Simple Search loader
-  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
--->
+  Text search loader
 
-{% capture result_elem %}
-  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">
-    <header>
-      <h2><a href="{url}">{title}</a></h2>
-      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
-        {categories}
-        {tags}
-      </div>
-    </header>
-    <p>{content}</p>
-  </article>
-{% endcapture %}
+  Self-contained implementation (no external library):
+  matches the query as a literal, case-insensitive phrase against each post's
+  title and content, then renders the surrounding context with the match
+  highlighted. Data comes from `/assets/js/data/search.json`.
+-->
 
 {% capture not_found %}<p class="mt-5">{{ site.data.locales[include.lang].search.no_results }}</p>{% endcapture %}
 
 <script>
-  {% comment %} Note: dependent library will be loaded in `js-selector.html` {% endcomment %}
   document.addEventListener('DOMContentLoaded', () => {
-    SimpleJekyllSearch({
-      searchInput: document.getElementById('search-input'),
-      resultsContainer: document.getElementById('search-results'),
-      json: '{{ '/assets/js/data/search.json' | relative_url }}',
-      searchResultTemplate: '{{ result_elem | strip_newlines }}',
-      noResultsText: '{{ not_found }}',
-      templateMiddleware: function(prop, value, template) {
-        if (prop === 'categories') {
-          if (value === '') {
-            return `${value}`;
-          } else {
-            return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
-          }
-        }
+    const searchUrl = {{ '/assets/js/data/search.json' | relative_url | jsonify }};
+    const noResultsHtml = {{ not_found | jsonify }};
 
-        if (prop === 'tags') {
-          if (value === '') {
-            return `${value}`;
-          } else {
-            return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
-          }
+    const RESULT_LIMIT = 10; // max number of results rendered
+    const LEAD = 50; // characters of context kept before the match
+    const WINDOW = 250; // total characters of the snippet
+
+    // A snippet is trimmed back to one of these so the match isn't split mid-word.
+    const BOUNDARY = /[\s，。！？；：、·…—""''（）《》「」【】,.!?;:'"()[\]{}]/;
+
+    const input = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+
+    let posts = null;
+
+    const escapeHtml = (value) =>
+      String(value).replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[ch]);
+
+    const buildSnippet = (content, needle) => {
+      const index = content.toLowerCase().indexOf(needle);
+
+      // Not found in the body (the match was in the title): show the beginning.
+      if (index < 0) {
+        const head = content.slice(0, WINDOW);
+        return escapeHtml(head) + (content.length > head.length ? '…' : '');
+      }
+
+      let start = Math.max(0, index - LEAD);
+      while (start > 0 && !BOUNDARY.test(content[start - 1])) {
+        start--;
+      }
+
+      const end = Math.min(content.length, Math.max(start + WINDOW, index + needle.length));
+
+      return (
+        (start > 0 ? '…' : '') +
+        escapeHtml(content.slice(start, index)) +
+        '<mark>' +
+        escapeHtml(content.slice(index, index + needle.length)) +
+        '</mark>' +
+        escapeHtml(content.slice(index + needle.length, end)) +
+        (end < content.length ? '…' : '')
+      );
+    };
+
+    const render = (matches, needle) => {
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = noResultsHtml;
+        return;
+      }
+
+      resultsContainer.innerHTML = matches
+        .map((post) => `<article class="px-1 px-sm-2 px-lg-4 px-xl-0">
+    <header>
+      <h2><a href="${escapeHtml(post.url)}">${escapeHtml(post.title)}</a></h2>
+      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
+        ${post.categories ? `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${escapeHtml(post.categories)}</div>` : ''}
+        ${post.tags ? `<div><i class="fa fa-tag fa-fw"></i>${escapeHtml(post.tags)}</div>` : ''}
+      </div>
+    </header>
+    <p>${buildSnippet(post.content, needle)}</p>
+  </article>`)
+        .join('');
+    };
+
+    const search = (query) => {
+      const needle = query.trim().toLowerCase();
+
+      if (!needle) {
+        resultsContainer.innerHTML = '';
+        return;
+      }
+
+      // The data may still be loading; re-run below once it arrives.
+      if (!posts) return;
+
+      const matches = [];
+      for (const post of posts) {
+        if (matches.length >= RESULT_LIMIT) break;
+        if ((post.title + '\n' + post.content).toLowerCase().includes(needle)) {
+          matches.push(post);
         }
       }
+
+      render(matches, needle);
+    };
+
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => search(input.value), 180);
     });
+
+    fetch(searchUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        posts = data;
+        if (input.value.trim()) search(input.value);
+      })
+      .catch(() => {
+        posts = [];
+      });
   });
 </script>

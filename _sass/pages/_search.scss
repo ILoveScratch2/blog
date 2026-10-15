@@ -125,6 +125,12 @@ search {
       -webkit-box-orient: vertical;
     }
   }
+
+  mark {
+    background-color: var(--search-mark-bg);
+    color: inherit;
+    padding: 0;
+  }
 }
 
 /* 'Cancel' link */
