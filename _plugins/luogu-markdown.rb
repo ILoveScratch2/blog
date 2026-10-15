@@ -12,19 +12,22 @@
 # 通过 _config.yml 里的 `kramdown: input: Luogu` 启用。
 
 require "kramdown"
+# GFM 是 Jekyll 默认的 kramdown 解析器（提供 ``` 围栏代码块、删除线、表格等）；
+# `input: Luogu` 覆盖默认值后必须显式继承它，否则这些语法会全部失效。
+require "kramdown-parser-gfm"
 
 module Kramdown
   module Parser
-    class Luogu < Kramdown
+    class Luogu < GFM
       # 开头围栏：至少三个冒号 + 名字，可带 [标签] 和 {属性}
       CONTAINER_OPEN = /^ {0,3}(:{3,})([A-Za-z][\w-]*)(?:\[([^\]\n]*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
       # 闭合围栏：整行只有冒号和空白
       FENCE_LINE = /^ {0,3}(:+)[ \t]*\n/
       CUTE_TABLE = /^ {0,3}::cute-table(?:\[([^\]\n]*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
 
-      # 让指令行能打断上一段的惰性续行（与 kramdown 对定义列表的处理一致）
+      # 额外让指令行能打断上一段的惰性续行（与 kramdown 对定义列表的处理一致）。
+      # GFM 已按 gfm_quirks 选好 @paragraph_end，这里只做并集。
       LUOGU_PARAGRAPH_END = Regexp.union(
-        Kramdown::Parser::Kramdown::PARAGRAPH_END,
         /^ {0,3}:{3,}[A-Za-z][\w-]*/,
         /^ {0,3}::cute-table/
       )
@@ -36,10 +39,7 @@ module Kramdown
       def initialize(source, options)
         super
         @block_parsers.unshift(:luogu_container, :luogu_cute_table)
-      end
-
-      def paragraph_end
-        self.class::LUOGU_PARAGRAPH_END
+        @paragraph_end = Regexp.union(@paragraph_end, LUOGU_PARAGRAPH_END)
       end
 
       # :::name[label]{attrs} … :::
