@@ -20,10 +20,12 @@ module Kramdown
   module Parser
     class Luogu < GFM
       # 开头围栏：至少三个冒号 + 名字，可带 [标签] 和 {属性}
-      CONTAINER_OPEN = /^ {0,3}(:{3,})([A-Za-z][\w-]*)(?:\[([^\]\n]*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
+      # 标签里允许 `\]` `\[` 这类转义（洛谷标题常见，如 `\[CSP-S 2022\]`），
+      # 否则 `[^\]\n]*` 会在转义括号处提前截断，整行匹配失败。
+      CONTAINER_OPEN = /^ {0,3}(:{3,})([A-Za-z][\w-]*)(?:\[((?:\\.|[^\\\]\n])*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
       # 闭合围栏：整行只有冒号和空白
       FENCE_LINE = /^ {0,3}(:+)[ \t]*\n/
-      CUTE_TABLE = /^ {0,3}::cute-table(?:\[([^\]\n]*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
+      CUTE_TABLE = /^ {0,3}::cute-table(?:\[((?:\\.|[^\\\]\n])*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
 
       # 洛谷允许围栏后跟空格分隔的参数（如 `line-numbers`、`lines=5-6`），但 GFM/kramdown
       # 的 info string 只接受单个 token，遇到空格整块会匹配失败退化成行内代码。
@@ -57,7 +59,7 @@ module Kramdown
         start_line = @src.current_line_number
         fence_length = @src[1].length
         name = @src[2]
-        label = @src[3]
+        label = @src[3]&.gsub(/\\([\[\]{}])/, '\1')
         attribute_string = @src[4]
         @src.pos += @src.matched_size
 
