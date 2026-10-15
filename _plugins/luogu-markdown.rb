@@ -25,6 +25,13 @@ module Kramdown
       FENCE_LINE = /^ {0,3}(:+)[ \t]*\n/
       CUTE_TABLE = /^ {0,3}::cute-table(?:\[([^\]\n]*)\])?(?:\{([^}\n]*)\})?[ \t]*\n/
 
+      # 洛谷允许围栏后跟空格分隔的参数（如 `line-numbers`、`lines=5-6`），但 GFM/kramdown
+      # 的 info string 只接受单个 token，遇到空格整块会匹配失败退化成行内代码。
+      # 这里放宽为「首个 token 作语言，其余忽略」。分组：\1 围栏 \2 围栏字符
+      # \3 语言全串 \4 语言 \5 额外参数 \6 代码正文。
+      FENCED_CODEBLOCK_MATCH =
+        /^[ ]{0,3}(([~`]){3,})\s*?((\S+?)(?:\?\S*)?)?((?:[ \t]+\S+)*)?\s*?\n(.*?)^[ ]{0,3}\1\2*\s*?\n/m
+
       # 额外让指令行能打断上一段的惰性续行（与 kramdown 对定义列表的处理一致）。
       # GFM 已按 gfm_quirks 选好 @paragraph_end，这里只做并集。
       LUOGU_PARAGRAPH_END = Regexp.union(
@@ -109,6 +116,23 @@ module Kramdown
         true
       end
       define_parser(:luogu_cute_table, CUTE_TABLE)
+
+      # 覆写 kramdown 的围栏代码块解析，改用本类的宽松 FENCED_CODEBLOCK_MATCH。
+      # 复用 GFM 注册的 :codeblock_fenced_gfm（其 handler 名就是 parse_codeblock_fenced）。
+      def parse_codeblock_fenced
+        return false unless @src.check(self.class::FENCED_CODEBLOCK_MATCH)
+
+        start_line_number = @src.current_line_number
+        @src.pos += @src.matched_size
+        el = new_block_el(:codeblock, @src[6], nil, location: start_line_number, fenced: true)
+        lang = @src[3].to_s.strip
+        unless lang.empty?
+          el.options[:lang] = lang
+          el.attr["class"] = "language-#{@src[4]}"
+        end
+        @tree.children << el
+        true
+      end
 
       protected
 
